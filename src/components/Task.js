@@ -15,15 +15,15 @@ class Task extends React.Component {
     render() {
         const task = this.props.task;
         return (
-            <li id={task.id}>
+            <div id={task.id} className="task">
                 {task.name}
                 <input value={task.name} onChange={(e) => this.handleChange(task, e)}/>
                 <div className="task-controls">
                     <button>Create</button>
                     <button>Edit</button>
-                    <button>Delete</button>
+                    <button onClick={(e) => this.handleDelete(task.id, e)}>Delete</button>
                 </div>
-            </li>
+            </div>
         );
     }
 }
