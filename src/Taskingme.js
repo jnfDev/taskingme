@@ -9,89 +9,75 @@ class Taskingme extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            tasks: [{ 
-                id: 1, 
-                name: 'John DOE today tasks', 
-                description: '', 
-                date: '2020-02-28 08:00:00',
-                state: false,
-                subTaks: [
-                    {
-                        id: 2,
-                        name: 'Breakfast',
-                        description: '',
-                        date: '2020-02-28 09:00:00',
-                        subTaks: [{
-                            id: 3,
-                            name: 'Make a juice', 
-                            description: '', 
-                            date: '2020-02-28 09:30:00',
-                            state: false,
-                            subTaks: []  
-                        }]
-                    },
-                    {
-                        id: 4,
-                        name: 'Go to work',
-                        description: '',
-                        date: '2020-02-28 10:00:00',
-                        subTaks: []
-                    }
-                ]
-            }]
+            tasks: [
+                { 
+                    id: 1, 
+                    name: 'John DOE today tasks', 
+                    description: '', 
+                    date: '2020-02-28 08:00:00',
+                    state: false,
+                    subTaks: [
+                        {
+                            id: 2,
+                            name: 'Breakfast',
+                            description: '',
+                            date: '2020-02-28 09:00:00',
+                            subTaks: [{
+                                id: 3,
+                                name: 'Make a juice', 
+                                description: '', 
+                                date: '2020-02-28 09:30:00',
+                                state: false,
+                                subTaks: []  
+                            }]
+                        },
+                        {
+                            id: 4,
+                            name: 'Go to work',
+                            description: '',
+                            date: '2020-02-28 10:00:00',
+                            subTaks: []
+                        }
+                    ]
+                }
+            ]
         };
 
-        this.handleChangeTask = this.handleChangeTask.bind(this);
-        // this.handleAddTask = this.handleAddTask.bind(this);
-        // this.handleDeleteTask = this.handleDeleteTask.bind(this);
+        this.handler = this.handler.bind(this);
+        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handlerMap = {
+            'update': this.handleUpdate
+        }
     }
 
-    handleChangeTask(updatedTask) {
-        console.log(updatedTask);
+    handler(process, task) {
 
-        // const updatedTasks = this.state.tasks.map(task => (task.id === updatedTask.id ? updatedTask : task));
-        const updatedTasks = this.updateTasksRecursively(this.state.tasks, updatedTask);
-        
+        if (typeof this.handlerMap[process] !== 'function') {
+            // Handle error
+            return;
+        }
+
+        const updatedTasks = this.handlerMap[process](this.state.tasks, task);
         this.setState({ tasks: updatedTasks });
     }
 
-    updateTasksRecursively(tasks, updateTask) {
+    handleUpdate(tasks, taskToUpdate) {
         return tasks.map(task => {
-            if (task.id === updateTask.id) {
-                task = Object.assign(task, updateTask);
+            if (task.id === taskToUpdate.id) {
+                task = Object.assign(task, taskToUpdate);
             } else {
-                task.subTaks = this.updateTasksRecursively(task.subTaks, updateTask);
+                task.subTaks = this.handleUpdate(task.subTaks, taskToUpdate);
             }
 
             return task;
         });
     }
 
-    // handleAddTask(e) {
-        
-    //     if (!this.state.task.length) {
-    //         return;
-    //     }
-
-    //     this.setState(state => ({
-    //         tasks: state.tasks.concat({
-    //             id: state.tasks.length + 1,
-    //             name: state.task
-    //         }),
-    //         task: ''
-    //     }));
-    // }
-
-    // handleDeleteTask(taskId) {
-    //     const updateTask = this.state.tasks.filter(task => task.id !== taskId);
-    //     this.setState({ tasks: updateTask });
-    // }
-
     render() {
         return (
             <main id="taskingme">
                 <section className="tasks-list-content">
-                    <TasksList tasks={this.state.tasks} handleChangeTask={this.handleChangeTask}/>
+                    <TasksList tasks={this.state.tasks} handler={this.handler}/>
                 </section>
                 <section className="task-viewer">
                     <TaskViewer />

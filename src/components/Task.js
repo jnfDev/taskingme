@@ -4,12 +4,17 @@ class Task extends React.Component {
 
     constructor(props) {
         super(props);
-        this.handleChange = this.handleChange.bind(this);
+        this.updateTask = this.updateTask.bind(this);
+        this.deleteTask = this.deleteTask.bind(this);
     }
 
-    handleChange(task, e){
+    updateTask(task, e){
         task.name = e.target.value;
-        this.props.handleChangeTask(task);
+        this.props.handler('update', task);
+    }
+
+    deleteTask(task, e) {
+        this.props.handler('delete', task);
     }
 
     render() {
@@ -17,11 +22,11 @@ class Task extends React.Component {
         return (
             <div id={task.id} className="task">
                 {task.name}
-                <input value={task.name} onChange={(e) => this.handleChange(task, e)}/>
+                <input value={task.name} onChange={(e) => this.updateTask(task, e)}/>
                 <div className="task-controls">
                     <button>Create</button>
                     <button>Edit</button>
-                    <button onClick={(e) => this.handleDelete(task.id, e)}>Delete</button>
+                    <button onClick={(e) => this.deleteTask(task, e)}>Delete</button>
                 </div>
             </div>
         );

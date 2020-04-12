@@ -7,8 +7,8 @@ class TaskList extends React.Component {
 
     renderTasksRecursively(tasks) {
         return tasks.map(aTask => (
-            <li>
-                <Task key={aTask.id} task={aTask} handleChangeTask={this.props.handleChangeTask} />
+            <li key={aTask.id}>
+                <Task task={aTask} handler={this.props.handler} />
                 <ul className="tasks-list">
                     {this.renderTasksRecursively(aTask.subTaks)}
                 </ul>
