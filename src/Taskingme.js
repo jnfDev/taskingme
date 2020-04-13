@@ -28,7 +28,7 @@ class Taskingme extends React.Component {
                                 description: '', 
                                 date: '2020-02-28 09:30:00',
                                 state: false,
-                                subTaks: []  
+                                subTaks: []
                             }]
                         },
                         {
@@ -45,8 +45,10 @@ class Taskingme extends React.Component {
 
         this.handler = this.handler.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
         this.handlerMap = {
-            'update': this.handleUpdate
+            'update': this.handleUpdate,
+            'delete': this.handleDelete
         }
     }
 
@@ -71,6 +73,17 @@ class Taskingme extends React.Component {
 
             return task;
         });
+    }
+
+    handleDelete(tasks, taskToDelete) {
+        return tasks.reduce((updateTasks, task) => {
+            if (task.id !== taskToDelete.id) {
+                task.subTaks = this.handleDelete(task.subTaks, taskToDelete)
+                updateTasks.push(task);
+            }
+
+            return updateTasks;
+        }, []);
     }
 
     render() {
