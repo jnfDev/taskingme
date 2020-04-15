@@ -8,9 +8,11 @@ class Task extends React.Component {
             editing: false
         }
 
+        this.taskInput = React.createRef();
+
         this.updateTask = this.updateTask.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
-        this.editTask = this.setEditingState.bind(this);
+        this.setEditingState = this.setEditingState.bind(this);
     }
 
     updateTask(task, e){
@@ -19,12 +21,17 @@ class Task extends React.Component {
     }
 
     setEditingState(state) {
-        console.log('onBlur');
         this.setState({ editing: state });
     }
 
     deleteTask(task, e) {
         this.props.handler('delete', task);
+    }
+
+    componentDidUpdate() {
+        if (this.state.editing) {
+            this.taskInput.current.focus();
+        }
     }
 
     render() {
@@ -33,7 +40,7 @@ class Task extends React.Component {
             <div id={task.id} className="task">
                 {console.log(this.state.editing)}
                 {this.state.editing 
-                    ? <input value={task.name} onChange={(e) => this.updateTask(task, e)}/>
+                    ? <input ref={this.taskInput} value={task.name} onChange={(e) => this.updateTask(task, e)}/>
                     : task.name
                 }
                 <div className="task-controls">
