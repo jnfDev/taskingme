@@ -11,7 +11,7 @@ class Task extends React.Component {
             description: props.task.description,
             date: props.task.date,
             state: props.task.state,
-            editing: false
+            editing: props.task.id > 0 ? false : true 
         }
 
         this.taskInput = React.createRef();
@@ -31,6 +31,10 @@ class Task extends React.Component {
         this.props.handler('delete', task);
     }
 
+    addTask(task) {
+        this.props.handler('add', task);
+    }
+
     componentDidUpdate() {
         if (this.state.editing) {
             this.taskInput.current.focus();
@@ -45,10 +49,19 @@ class Task extends React.Component {
         this.setState({ editing: state });
     }
 
+    cancelTask(task) {
+        if (task.id > 0) {
+            this.setEditingState(false);
+            this.setTaskValue(task.name);
+        } else {
+            this.deleteTask(task);
+        }
+    }
+
     getControls(task) {
         return (
             <div className="task-controls">
-                <button>Add</button>
+                <button onClick={(e) => this.addTask(task)}>Add</button>
                 <button onClick={(e) => this.setEditingState(true)}>Edit</button>
                 <button onClick={(e) => this.deleteTask(task)}>Delete</button>
             </div>
@@ -59,7 +72,7 @@ class Task extends React.Component {
         return (
             <div className="task-controls">
                 <button disabled={!task.value} onClick={(e) => this.saveTask(task)}>Save</button>
-                <button onClick={(e) => this.setEditingState(false) || this.setTaskValue(task.name)}>Cancel</button>
+                <button onClick={(e) => this.cancelTask(task)}>Cancel</button>
             </div>
         );
     }

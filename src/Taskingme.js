@@ -46,9 +46,11 @@ class Taskingme extends React.Component {
         this.handler = this.handler.bind(this);
         this.handleUpdate = this.handleUpdate.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.handleAdd = this.handleAdd.bind(this);
         this.handlerMap = {
             'update': this.handleUpdate,
-            'delete': this.handleDelete
+            'delete': this.handleDelete,
+            'add': this.handleAdd
         }
     }
 
@@ -84,6 +86,18 @@ class Taskingme extends React.Component {
 
             return updateTasks;
         }, []);
+    }
+
+    handleAdd(tasks, taskToAddInside) {
+        return tasks.map(task => {
+            if (task.id === taskToAddInside.id) {
+                task.subTaks.push({id: 0, name:'', description:'', date: '0000-00-00 00:00:00', subTaks:[]});
+            } else {
+                task.subTaks = this.handleAdd(task.subTaks, taskToAddInside);
+            }
+
+            return task;
+        });
     }
 
     render() {

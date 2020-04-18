@@ -6,6 +6,11 @@ import Task from './Task';
 class TaskList extends React.Component {
 
     renderTasksRecursively(tasks) {
+        
+        if (!Array.isArray(tasks)) {
+            return;
+        }
+
         return tasks.map(aTask => (
             <li key={aTask.id}>
                 <Task task={aTask} handler={this.props.handler} />
