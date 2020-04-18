@@ -21,10 +21,6 @@ class Task extends React.Component {
         this.props.handler('update', task);
     }
 
-    setEditingState(state) {
-        this.setState({ editing: state });
-    }
-
     deleteTask(task, e) {
         this.props.handler('delete', task);
     }
@@ -33,6 +29,10 @@ class Task extends React.Component {
         if (this.state.editing) {
             this.taskInput.current.focus();
         }
+    }
+
+    setEditingState(state) {
+        this.setState({ editing: state });
     }
 
     getControls(task) {
