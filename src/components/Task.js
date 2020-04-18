@@ -13,6 +13,7 @@ class Task extends React.Component {
         this.updateTask = this.updateTask.bind(this);
         this.deleteTask = this.deleteTask.bind(this);
         this.setEditingState = this.setEditingState.bind(this);
+        this.getControls = this.getControls.bind(this);
     }
 
     updateTask(task, e){
@@ -34,23 +35,35 @@ class Task extends React.Component {
         }
     }
 
+    getControls(task) {
+        return (
+            <div className="task-controls">
+                <button>Add</button>
+                <button onClick={(e) => this.setEditingState(true)}>Edit</button>
+                <button onClick={(e) => this.deleteTask(task, e)}>Delete</button>
+            </div>
+        );
+    }
+
+    getEditingControls(task) {
+        return (
+            <div className="task-controls">
+                <button onClick={(e) => this.setEditingState(false)}>Save</button>
+                <button onClick={(e) => this.setEditingState(false)}>Cancel</button>
+            </div>
+        );
+    }
+
     render() {
         const task = this.props.task;
+        const controls = this.state.editing ? this.getEditingControls(task) : this.getControls(task);
         return (
             <div id={task.id} className="task">
-                {console.log(this.state.editing)}
                 {this.state.editing 
                     ? <input ref={this.taskInput} value={task.name} onChange={(e) => this.updateTask(task, e)}/>
                     : task.name
                 }
-                <div className="task-controls">
-                    {this.state.editing
-                        ? <button onClick={(e) => this.setEditingState(false)}>Save</button>
-                        : <button>Add</button>
-                    }
-                    <button onClick={(e) => this.setEditingState(true)}>Edit</button>
-                    <button onClick={(e) => this.deleteTask(task, e)}>Delete</button>
-                </div>
+                {controls}
             </div>
         );
     }
