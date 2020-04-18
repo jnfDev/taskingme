@@ -58,7 +58,7 @@ class Task extends React.Component {
     getEditingControls(task) {
         return (
             <div className="task-controls">
-                <button onClick={(e) => this.saveTask(task)}>Save</button>
+                <button disabled={!task.value} onClick={(e) => this.saveTask(task)}>Save</button>
                 <button onClick={(e) => this.setEditingState(false) || this.setTaskValue(task.name)}>Cancel</button>
             </div>
         );
