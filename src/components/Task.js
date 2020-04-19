@@ -23,7 +23,7 @@ class Task extends React.Component {
 
     saveTask(task){
         task.name = task.value;
-        this.props.handler('update', task);
+        this.props.handler('save', task);
         this.setEditingState(false);
     }
 
@@ -50,7 +50,7 @@ class Task extends React.Component {
     }
 
     cancelTask(task) {
-        if (task.id > 0) {
+        if (task.name !== '') {
             this.setEditingState(false);
             this.setTaskValue(task.name);
         } else {
@@ -79,10 +79,12 @@ class Task extends React.Component {
 
     render() {
         const task = this.state;
-        const controls = task.editing ? this.getEditingControls(task) : this.getControls(task);
+        const editingMode = task.editing || task.name === ''; 
+        const controls = editingMode ? this.getEditingControls(task) : this.getControls(task);
+
         return (
             <div id={task.id} className="task">
-                {task.editing 
+                {editingMode
                     ? <input ref={this.taskInput} value={task.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
                     : task.name
                 }

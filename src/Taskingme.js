@@ -16,41 +16,20 @@ class Taskingme extends React.Component {
                     description: '', 
                     date: '2020-02-28 08:00:00',
                     state: false,
-                    subTaks: [
-                        {
-                            id: 2,
-                            name: 'Breakfast',
-                            description: '',
-                            date: '2020-02-28 09:00:00',
-                            subTaks: [{
-                                id: 3,
-                                name: 'Make a juice', 
-                                description: '', 
-                                date: '2020-02-28 09:30:00',
-                                state: false,
-                                subTaks: []
-                            }]
-                        },
-                        {
-                            id: 4,
-                            name: 'Go to work',
-                            description: '',
-                            date: '2020-02-28 10:00:00',
-                            subTaks: []
-                        }
-                    ]
+                    subTaks: []
                 }
-            ]
+            ],
+            taskIndex: 1,
         };
 
         this.handler = this.handler.bind(this);
-        this.handleUpdate = this.handleUpdate.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.handleAdd = this.handleAdd.bind(this);
         this.handlerMap = {
-            'update': this.handleUpdate,
+            'add': this.handleAdd,
+            'save': this.handleSave,
             'delete': this.handleDelete,
-            'add': this.handleAdd
         }
     }
 
@@ -65,12 +44,12 @@ class Taskingme extends React.Component {
         this.setState({ tasks: updatedTasks });
     }
 
-    handleUpdate(tasks, taskToUpdate) {
+    handleSave(tasks, taskToUpdate) {
         return tasks.map(task => {
             if (task.id === taskToUpdate.id) {
                 task = Object.assign(task, taskToUpdate);
             } else {
-                task.subTaks = this.handleUpdate(task.subTaks, taskToUpdate);
+                task.subTaks = this.handleSave(task.subTaks, taskToUpdate);
             }
 
             return task;
@@ -91,7 +70,15 @@ class Taskingme extends React.Component {
     handleAdd(tasks, taskToAddInside) {
         return tasks.map(task => {
             if (task.id === taskToAddInside.id) {
-                task.subTaks.push({id: 0, name:'', description:'', date: '0000-00-00 00:00:00', subTaks:[]});
+                const taskId = this.state.taskIndex + 1;
+                this.setState({taskIndex: taskId}); 
+                task.subTaks.push({
+                    id: taskId,
+                    name: '',
+                    description: '',
+                    date: `${(new Date()).toJSON().slice(0,10)} ${(new Date()).toJSON().slice(11,19)}`,
+                    subTaks: []
+                });
             } else {
                 task.subTaks = this.handleAdd(task.subTaks, taskToAddInside);
             }
