@@ -41,6 +41,12 @@ class Task extends React.Component {
         }
     }
 
+    componentDidMount() {
+        if (!this.state.editing && this.state.name === '') {
+            this.setEditingState(true);
+        }
+    }
+
     setTaskValue(newValue){
         this.setState({value: newValue})
     }
@@ -79,12 +85,11 @@ class Task extends React.Component {
 
     render() {
         const task = this.state;
-        const editingMode = task.editing || task.name === ''; 
-        const controls = editingMode ? this.getEditingControls(task) : this.getControls(task);
+        const controls = task.editing ? this.getEditingControls(task) : this.getControls(task);
 
         return (
             <div id={task.id} className="task">
-                {editingMode
+                {task.editing
                     ? <input ref={this.taskInput} value={task.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
                     : task.name
                 }
