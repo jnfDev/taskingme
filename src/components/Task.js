@@ -1,5 +1,12 @@
 import React from 'react';
 
+// Icons 
+import AddIcon from '@material-ui/icons/AddCircleOutline';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/DeleteOutline';
+import SaveIcon from '@material-ui/icons/CheckCircleOutline';
+import CancelIcon from '@material-ui/icons/CancelOutlined';
+
 class Task extends React.Component {
 
     constructor(props) {
@@ -67,9 +74,9 @@ class Task extends React.Component {
     getControls(task) {
         return (
             <div className="task-controls">
-                <button onClick={(e) => this.addTask(task)}>Add</button>
-                <button onClick={(e) => this.setEditingState(true)}>Edit</button>
-                <button onClick={(e) => this.deleteTask(task)}>Delete</button>
+                <button onClick={(e) => this.addTask(task)}><AddIcon /> Add</button>
+                <button onClick={(e) => this.setEditingState(true)}><EditIcon /> Edit</button>
+                <button onClick={(e) => this.deleteTask(task)}><DeleteIcon /> Delete</button>
             </div>
         );
     }
@@ -77,8 +84,8 @@ class Task extends React.Component {
     getEditingControls(task) {
         return (
             <div className="task-controls">
-                <button disabled={!task.value} onClick={(e) => this.saveTask(task)}>Save</button>
-                <button onClick={(e) => this.cancelTask(task)}>Cancel</button>
+                <button disabled={!task.value} onClick={(e) => this.saveTask(task)}><SaveIcon /> Save</button>
+                <button onClick={(e) => this.cancelTask(task)}><CancelIcon /> Cancel</button>
             </div>
         );
     }
