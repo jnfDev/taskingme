@@ -4,6 +4,8 @@ import React from 'react';
 import TasksList from './components/TasksList';
 import TaskViewer from './components/TaskViewer';
 
+import './Taskingme.scss';
+
 class Taskingme extends React.Component {
 
     constructor(props) {
