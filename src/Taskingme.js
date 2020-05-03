@@ -91,11 +91,11 @@ class Taskingme extends React.Component {
 
     render() {
         return (
-            <main id="taskingme">
-                <section className="tasks-list-content">
+            <main id="taskingme" className="row">
+                <section className="col-sm-4 tasks-list-content">
                     <TasksList tasks={this.state.tasks} handler={this.handler}/>
                 </section>
-                <section className="task-viewer">
+                <section className="col-sm-8 task-viewer">
                     <TaskViewer />
                 </section>
             </main>
