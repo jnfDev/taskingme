@@ -1,1 +1,19 @@
 @import '~bootstrap/scss/bootstrap';
+
+// Components
+.task {
+    label {
+        padding: 0.375rem 0.75rem;
+    }
+    .task-controls {
+        text-align: right;
+    }
+}
+
+
+#taskingme {
+    .MuiSvgIcon-root {
+        font-size: 1.2rem;
+        margin-top: -4px;
+    }
+}
