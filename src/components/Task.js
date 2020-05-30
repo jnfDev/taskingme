@@ -1,11 +1,16 @@
 import React from 'react';
 
+// Bootstrap components
+import Button from 'react-bootstrap/Button';
+import Dropdown from 'react-bootstrap/Dropdown';
+
 // Icons 
 import AddIcon from '@material-ui/icons/AddCircleOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/DeleteOutline';
 import SaveIcon from '@material-ui/icons/CheckCircleOutline';
 import CancelIcon from '@material-ui/icons/CancelOutlined';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
 class Task extends React.Component {
 
@@ -74,9 +79,14 @@ class Task extends React.Component {
     getControls(task) {
         return (
             <div className="task-controls">
-                <button onClick={(e) => this.addTask(task)}><AddIcon /> Add</button>
-                <button onClick={(e) => this.setEditingState(true)}><EditIcon /> Edit</button>
-                <button onClick={(e) => this.deleteTask(task)}><DeleteIcon /> Delete</button>
+                <Dropdown>
+                    <Dropdown.Toggle variant="light" bsPrefix><MoreIcon /></Dropdown.Toggle>
+                    <Dropdown.Menu>
+                        <Dropdown.Item variant="light" onClick={(e) => this.addTask(task)}><AddIcon /> Add</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.setEditingState(true)}><EditIcon /> Edit</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.deleteTask(task)}><DeleteIcon /> Delete</Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
             </div>
         );
     }
@@ -84,8 +94,12 @@ class Task extends React.Component {
     getEditingControls(task) {
         return (
             <div className="task-controls">
-                <button disabled={!task.value} onClick={(e) => this.saveTask(task)}><SaveIcon /> Save</button>
-                <button onClick={(e) => this.cancelTask(task)}><CancelIcon /> Cancel</button>
+                <Button variant="light" disabled={!task.value} onClick={(e) => this.saveTask(task)}>
+                    <SaveIcon />
+                </Button>
+                <Button variant="light" onClick={(e) => this.cancelTask(task)}>
+                    <CancelIcon />
+                </Button>
             </div>
         );
     }
@@ -96,11 +110,17 @@ class Task extends React.Component {
 
         return (
             <div id={task.id} className="task">
-                {task.editing
-                    ? <input ref={this.taskInput} value={task.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
-                    : task.name
-                }
-                {controls}
+                <div class="form-group row">
+                    <div className="col-sm-8">
+                        {task.editing
+                            ? <input className="form-control" ref={this.taskInput} value={task.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
+                            : <label>task.name</label>
+                        }
+                    </div>
+                    <div className="col-sm-3 offset-sm-1">
+                        {controls}
+                    </div>
+                </div>
             </div>
         );
     }
