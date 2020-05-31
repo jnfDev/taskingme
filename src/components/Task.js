@@ -114,7 +114,7 @@ class Task extends React.Component {
                     <div className="col-sm-8">
                         {task.editing
                             ? <input className="form-control" ref={this.taskInput} value={task.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
-                            : <label>task.name</label>
+                            : <label>{task.name}</label>
                         }
                     </div>
                     <div className="col-sm-3 offset-sm-1">
