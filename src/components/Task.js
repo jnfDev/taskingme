@@ -17,12 +17,7 @@ class Task extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            id: props.task.id,
-            name: props.task.name,
             value: props.task.name,
-            description: props.task.description,
-            date: props.task.date,
-            state: props.task.state,
             editing: props.task.id > 0 ? false : true 
         }
 
@@ -33,18 +28,28 @@ class Task extends React.Component {
         this.getControls = this.getControls.bind(this);
     }
 
-    saveTask(task){
-        task.name = task.value;
-        this.props.handler('save', task);
+    setTaskValue(newValue){
+        this.setState({value: newValue})
+    }
+
+    setEditingState(state) {
+        this.setState({ editing: state });
+    }
+
+    saveTask(){
+        this.props.handler('save', {
+            id: this.props.task.id,
+            name: this.state.value
+        });
         this.setEditingState(false);
     }
 
-    deleteTask(task) {
-        this.props.handler('delete', task);
+    deleteTask() {
+        this.props.handler('delete', { id: this.props.task.id });
     }
 
-    addTask(task) {
-        this.props.handler('add', task);
+    addTask() {
+        this.props.handler('add', { id: this.props.task.id });
     }
 
     componentDidUpdate() {
@@ -54,50 +59,42 @@ class Task extends React.Component {
     }
 
     componentDidMount() {
-        if (!this.state.editing && this.state.name === '') {
+        if (!this.state.editing && this.props.task.name === '') {
             this.setEditingState(true);
         }
     }
 
-    setTaskValue(newValue){
-        this.setState({value: newValue})
-    }
-
-    setEditingState(state) {
-        this.setState({ editing: state });
-    }
-
-    cancelTask(task) {
-        if (task.name !== '') {
+    cancelTask() {
+        if (this.props.task.name !== '') {
             this.setEditingState(false);
-            this.setTaskValue(task.name);
+            this.setTaskValue(this.props.task.name);
         } else {
-            this.deleteTask(task);
+            this.deleteTask();
         }
     }
 
-    getControls(task) {
+    getControls() {
         return (
             <div className="task-controls">
                 <Dropdown>
                     <Dropdown.Toggle variant="light" bsPrefix><MoreIcon /></Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item variant="light" onClick={(e) => this.addTask(task)}><AddIcon /> Add</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.addTask()}><AddIcon /> Add</Dropdown.Item>
                         <Dropdown.Item variant="light" onClick={(e) => this.setEditingState(true)}><EditIcon /> Edit</Dropdown.Item>
-                        <Dropdown.Item variant="light" onClick={(e) => this.deleteTask(task)}><DeleteIcon /> Delete</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.deleteTask()}><DeleteIcon /> Delete</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
         );
     }
 
-    getEditingControls(task) {
+    getEditingControls() {
         return (
             <div className="task-controls">
-                <Button variant="light" disabled={!task.value} onClick={(e) => this.saveTask(task)}>
+                <Button variant="light" disabled={!this.state.value} onClick={(e) => this.saveTask()}>
                     <SaveIcon />
                 </Button>
-                <Button variant="light" onClick={(e) => this.cancelTask(task)}>
+                <Button variant="light" onClick={(e) => this.cancelTask()}>
                     <CancelIcon />
                 </Button>
             </div>
@@ -105,16 +102,14 @@ class Task extends React.Component {
     }
 
     render() {
-        const task = this.state;
-        const controls = task.editing ? this.getEditingControls(task) : this.getControls(task);
-
+        const controls = this.state.editing ? this.getEditingControls() : this.getControls();
         return (
-            <div id={task.id} className="task">
-                <div class="form-group row">
+            <div id={this.props.task.id} className="task">
+                <div className="form-group row">
                     <div className="col-sm-8">
-                        {task.editing
-                            ? <input className="form-control" ref={this.taskInput} value={task.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
-                            : <label>{task.name}</label>
+                        {this.state.editing
+                            ? <input className="form-control" ref={this.taskInput} value={this.state.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
+                            : <label>{this.props.task.name}</label>
                         }
                     </div>
                     <div className="col-sm-3 offset-sm-1">

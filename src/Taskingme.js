@@ -69,11 +69,11 @@ class Taskingme extends React.Component {
         }, []);
     }
 
-    handleAdd(tasks, taskToAddInside) {
+    handleAdd(tasks, parentTask) {
         return tasks.map(task => {
-            if (task.id === taskToAddInside.id) {
+            if (task.id === parentTask.id) {
                 const taskId = this.state.taskIndex + 1;
-                this.setState({taskIndex: taskId}); 
+                this.setState({taskIndex: taskId});
                 task.subTaks.push({
                     id: taskId,
                     name: '',
@@ -82,7 +82,7 @@ class Taskingme extends React.Component {
                     subTaks: []
                 });
             } else {
-                task.subTaks = this.handleAdd(task.subTaks, taskToAddInside);
+                task.subTaks = this.handleAdd(task.subTaks, parentTask);
             }
 
             return task;
