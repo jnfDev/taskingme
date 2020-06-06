@@ -14,6 +14,13 @@
     }
 }
 
+.tasks-list {
+    ul,
+    li {
+        list-style: none;
+    }
+}
+
 
 #taskingme {
     .MuiSvgIcon-root {
