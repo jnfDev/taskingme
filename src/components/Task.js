@@ -90,7 +90,7 @@ class Task extends React.Component {
 
     getEditingControls() {
         return (
-            <div className="task-controls">
+            <div className="task-controls editing">
                 <Button variant="light" disabled={!this.state.value} onClick={(e) => this.saveTask()}>
                     <SaveIcon />
                 </Button>

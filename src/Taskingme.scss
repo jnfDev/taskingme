@@ -5,8 +5,12 @@
     label {
         padding: 0.375rem 0.75rem;
     }
-    .task-controls {
+    .task-controls:not(.editing) {
         text-align: right;
+        display: none;
+    }
+    &:hover {
+        .task-controls { display: block; }    
     }
 }
 
