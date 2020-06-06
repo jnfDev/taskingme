@@ -17,7 +17,7 @@ class Taskingme extends React.Component {
                     name: 'John DOE today tasks', 
                     description: '', 
                     date: '2020-02-28 08:00:00',
-                    state: false,
+                    done: false,
                     subTaks: []
                 }
             ],
