@@ -36,11 +36,8 @@ class Task extends React.Component {
         this.setState({ editing: state });
     }
 
-    saveTask(){
-        this.props.handler('save', {
-            id: this.props.task.id,
-            name: this.state.value
-        });
+    saveTask(task){
+        this.props.handler('save', Object.assign({id: this.props.task.id }, task));
         this.setEditingState(false);
     }
 
@@ -91,7 +88,7 @@ class Task extends React.Component {
     getEditingControls() {
         return (
             <div className="task-controls editing">
-                <Button variant="light" disabled={!this.state.value} onClick={(e) => this.saveTask()}>
+                <Button variant="light" disabled={!this.state.value} onClick={(e) => this.saveTask({ name: this.state.value })}>
                     <SaveIcon />
                 </Button>
                 <Button variant="light" onClick={(e) => this.cancelTask()}>
@@ -105,12 +102,16 @@ class Task extends React.Component {
         const controls = this.state.editing ? this.getEditingControls() : this.getControls();
         return (
             <div id={this.props.task.id} className="task">
-                <div className="form-group row">
+                <div className="row">
                     <div className="col-sm-8">
                         {this.state.editing
                             ? <input className="form-control" ref={this.taskInput} value={this.state.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
-                            : <label>{this.props.task.name}</label>
+                            : <div className="form-group form-check">
+                                <input type="checkbox" className="form-check-input" id="taskState" defaultChecked={this.props.task.done} onChange={(e) => this.saveTask({ done: e.target.checked })}/> 
+                                <label className="form-check-label" htmlFor="taskState">{this.props.task.name}</label>
+                            </div>
                         }
+
                     </div>
                     <div className="col-sm-3 offset-sm-1">
                         {controls}
