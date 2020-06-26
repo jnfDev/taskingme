@@ -29,7 +29,7 @@ class Task extends React.Component {
     }
 
     setTaskValue(newValue){
-        this.setState({value: newValue})
+        this.setState({value: newValue});
     }
 
     setEditingState(state) {
@@ -37,8 +37,8 @@ class Task extends React.Component {
     }
 
     saveTask(task){
-        this.props.handler('save', Object.assign({id: this.props.task.id }, task));
-        this.setEditingState(false);
+        this.handler('save', { ...task, id: this.props.task.id });
+        this.setState({ editing: false });
     }
 
     deleteTask() {
@@ -57,13 +57,13 @@ class Task extends React.Component {
 
     componentDidMount() {
         if (!this.state.editing && this.props.task.name === '') {
-            this.setEditingState(true);
+            this.setState({ editing: true });
         }
     }
 
     cancelTask() {
         if (this.props.task.name !== '') {
-            this.setEditingState(false);
+            this.setState({ editing: false });
             this.setTaskValue(this.props.task.name);
         } else {
             this.deleteTask();
@@ -77,7 +77,7 @@ class Task extends React.Component {
                     <Dropdown.Toggle variant="light" bsPrefix><MoreIcon /></Dropdown.Toggle>
                     <Dropdown.Menu>
                         <Dropdown.Item variant="light" onClick={(e) => this.addTask()}><AddIcon /> Add</Dropdown.Item>
-                        <Dropdown.Item variant="light" onClick={(e) => this.setEditingState(true)}><EditIcon /> Edit</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.setState({ editing: true })}><EditIcon /> Edit</Dropdown.Item>
                         <Dropdown.Item variant="light" onClick={(e) => this.deleteTask()}><DeleteIcon /> Delete</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
