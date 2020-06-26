@@ -38,7 +38,7 @@ class Taskingme extends React.Component {
     handler(process, task) {
 
         if (typeof this.handlerMap[process] !== 'function') {
-            // Handle error
+            console.error(new Error(`Process '${process}' not found.`))
             return;
         }
 
