@@ -38,7 +38,7 @@ class Taskingme extends React.Component {
     handler(process, task) {
 
         if (typeof this.handlerMap[process] !== 'function') {
-            // Handle error
+            console.error(new Error(`Process '${process}' not found.`))
             return;
         }
 
@@ -49,7 +49,7 @@ class Taskingme extends React.Component {
     handleSave(tasks, taskToUpdate) {
         return tasks.map(task => {
             if (task.id === taskToUpdate.id) {
-                task = Object.assign(task, taskToUpdate);
+                task = {...task, ...taskToUpdate};
             } else {
                 task.subTaks = this.handleSave(task.subTaks, taskToUpdate);
             }
@@ -61,7 +61,7 @@ class Taskingme extends React.Component {
     handleDelete(tasks, taskToDelete) {
         return tasks.reduce((updateTasks, task) => {
             if (task.id !== taskToDelete.id) {
-                task.subTaks = this.handleDelete(task.subTaks, taskToDelete)
+                task.subTaks = this.handleDelete(task.subTaks, taskToDelete);
                 updateTasks.push(task);
             }
 

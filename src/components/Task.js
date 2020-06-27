@@ -23,30 +23,25 @@ class Task extends React.Component {
 
         this.taskInput = React.createRef();
 
-        this.saveTask = this.saveTask.bind(this);
-        this.deleteTask = this.deleteTask.bind(this);
-        this.getControls = this.getControls.bind(this);
+        // Set a proxy to this.props.handler
+        this.handler = new Proxy(this.props.handler, {
+            apply: (target, thisArg, args) => {
+                const [process, task = {}] = args;
+                if (process === 'save') {
+                    this.setState({ editing: false });
+                }
+                target.call(thisArg, process, { ...task, id: this.props.task.id });
+            }
+        });
     }
 
-    setTaskValue(newValue){
-        this.setState({value: newValue})
-    }
-
-    setEditingState(state) {
-        this.setState({ editing: state });
-    }
-
-    saveTask(task){
-        this.props.handler('save', Object.assign({id: this.props.task.id }, task));
-        this.setEditingState(false);
-    }
-
-    deleteTask() {
-        this.props.handler('delete', { id: this.props.task.id });
-    }
-
-    addTask() {
-        this.props.handler('add', { id: this.props.task.id });
+    cancelTask() {
+        if (this.props.task.name !== '') {
+            this.setState({ editing: false });
+            this.setState({ value: this.props.task.name });
+        } else {
+            this.handler('delete');
+        }
     }
 
     componentDidUpdate() {
@@ -57,16 +52,7 @@ class Task extends React.Component {
 
     componentDidMount() {
         if (!this.state.editing && this.props.task.name === '') {
-            this.setEditingState(true);
-        }
-    }
-
-    cancelTask() {
-        if (this.props.task.name !== '') {
-            this.setEditingState(false);
-            this.setTaskValue(this.props.task.name);
-        } else {
-            this.deleteTask();
+            this.setState({ editing: true });
         }
     }
 
@@ -76,9 +62,9 @@ class Task extends React.Component {
                 <Dropdown>
                     <Dropdown.Toggle variant="light" bsPrefix><MoreIcon /></Dropdown.Toggle>
                     <Dropdown.Menu>
-                        <Dropdown.Item variant="light" onClick={(e) => this.addTask()}><AddIcon /> Add</Dropdown.Item>
-                        <Dropdown.Item variant="light" onClick={(e) => this.setEditingState(true)}><EditIcon /> Edit</Dropdown.Item>
-                        <Dropdown.Item variant="light" onClick={(e) => this.deleteTask()}><DeleteIcon /> Delete</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.handler('add')}><AddIcon /> Add</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.setState({ editing: true })}><EditIcon /> Edit</Dropdown.Item>
+                        <Dropdown.Item variant="light" onClick={(e) => this.handler('delete')}><DeleteIcon /> Delete</Dropdown.Item>
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
@@ -88,7 +74,7 @@ class Task extends React.Component {
     getEditingControls() {
         return (
             <div className="task-controls editing">
-                <Button variant="light" disabled={!this.state.value} onClick={(e) => this.saveTask({ name: this.state.value })}>
+                <Button variant="light" disabled={!this.state.value} onClick={(e) => this.handler('save', { name: this.state.value })}>
                     <SaveIcon />
                 </Button>
                 <Button variant="light" onClick={(e) => this.cancelTask()}>
@@ -105,9 +91,20 @@ class Task extends React.Component {
                 <div className="row">
                     <div className="col-sm-8">
                         {this.state.editing
-                            ? <input className="form-control" ref={this.taskInput} value={this.state.value} onChange={(e) => this.setTaskValue(e.target.value)}/>
+                            ? <input 
+                                className="form-control" 
+                                ref={this.taskInput} 
+                                value={this.state.value} 
+                                onChange={(e) => this.setState({ value: e.target.value })}
+                            />
                             : <div className="form-group form-check">
-                                <input type="checkbox" className="form-check-input" id="taskState" defaultChecked={this.props.task.done} onChange={(e) => this.saveTask({ done: e.target.checked })}/> 
+                                <input 
+                                    type="checkbox" 
+                                    className="form-check-input" 
+                                    id="taskState" 
+                                    defaultChecked={this.props.task.done} 
+                                    onChange={(e) => this.handler('save', { done: e.target.checked }) }
+                                /> 
                                 <label className="form-check-label" htmlFor="taskState">{this.props.task.name}</label>
                             </div>
                         }
