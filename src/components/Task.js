@@ -91,9 +91,20 @@ class Task extends React.Component {
                 <div className="row">
                     <div className="col-sm-8">
                         {this.state.editing
-                            ? <input className="form-control" ref={this.taskInput} value={this.state.value} onChange={(e) => this.setState({ value: e.target.value })}/>
+                            ? <input 
+                                className="form-control" 
+                                ref={this.taskInput} 
+                                value={this.state.value} 
+                                onChange={(e) => this.setState({ value: e.target.value })}
+                            />
                             : <div className="form-group form-check">
-                                <input type="checkbox" className="form-check-input" id="taskState" defaultChecked={this.props.task.done} onChange={(e) => this.handler('save', { done: e.target.checked }) }/> 
+                                <input 
+                                    type="checkbox" 
+                                    className="form-check-input" 
+                                    id="taskState" 
+                                    defaultChecked={this.props.task.done} 
+                                    onChange={(e) => this.handler('save', { done: e.target.checked }) }
+                                /> 
                                 <label className="form-check-label" htmlFor="taskState">{this.props.task.name}</label>
                             </div>
                         }
